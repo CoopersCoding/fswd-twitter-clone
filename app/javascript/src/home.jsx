@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom'
 
 import './home.scss';
 
-const Home = props => (
-  <h1>Home page react is working</h1>
-)
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
@@ -13,3 +10,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(document.createElement('div')),
   )
 })
+
