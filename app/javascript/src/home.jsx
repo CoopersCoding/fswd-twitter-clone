@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
+import Layout from '@src/layout';
 import './home.scss';
 import { safeCredentials, handleErrors } from './utils/fetchHelper';
 
