@@ -87,6 +87,8 @@ class Home extends Component {
                     {/* ... */}
                   </form>
                 </div>
+
+                
                 <div className="sign-up col-xs-4 col-xs-offset-1">
                   <form onSubmit={this.handleSignUp}>
                     <div className="new-to-t">
@@ -125,6 +127,8 @@ class Home extends Component {
                     <button type="submit" className="btn btn-primary">Sign Up</button>
                   </form>
                 </div>
+
+
               </div>
             </div>
           </div>
