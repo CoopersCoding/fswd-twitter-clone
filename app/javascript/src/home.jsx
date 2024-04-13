@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import './home.scss';
-import { safeCredentials, handleErrors } from './utils/fetchHelper';
 
 class Home extends Component {
   constructor(props) {
@@ -11,58 +10,42 @@ class Home extends Component {
     this.state = {
       username: '',
       password: '',
-      email: ''
+      email: '',
     };
   }
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
+  };
 
-  handleSignUp = (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
 
     const { username, password, email } = this.state;
 
-    // Send a POST request to /api/users with the form data
-    fetch('/api/users', safeCredentials({
+    fetch('/api/users', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, password, email })
-    }))
+      body: JSON.stringify({ username, password, email }),
+    })
       .then(response => response.json())
-      .then(data => {
-        // Handle the response data
-        console.log(data);
-      })
-      .catch(error => {
-        // Handle any errors
-        console.error(error);
-      });
-  }
-
-  componentDidMount() {
-    // do something
-  }
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+  };
 
   render() {
     const { username, password, email } = this.state;
 
     return (
-      <>
-        <div id="homeback">
-        </div>
-        <nav className="navbar navbar-default navbar-fixed-top">
-          {/* ... */}
-        </nav>
+      <Layout>
+        <div id="homeback"></div>
         <div className="main">
           <div className="container">
             <div className="row">
               <div className="front-card col-xs-10 col-xs-offset-1">
-                {/* ... */}
                 <div className="log-in col-xs-4 col-xs-offset-1">
                   <form>
                     <div className="form-group">
@@ -75,7 +58,7 @@ class Home extends Component {
                         onChange={this.handleInputChange}
                       />
                     </div>
-                    <div className="form-group col-xs-8">
+                    <div className="form-group">
                       <input
                         type="password"
                         className="form-control password"
@@ -85,16 +68,17 @@ class Home extends Component {
                         onChange={this.handleInputChange}
                       />
                     </div>
-                    {/* ... */}
+                    <button type="submit" className="btn btn-primary">
+                      Sign In
+                    </button>
                   </form>
                 </div>
 
-                
                 <div className="sign-up col-xs-4 col-xs-offset-1">
-                  <form onSubmit={this.handleSignUp}>
-                    <div className="new-to-t">
-                      <p><strong>New to Twitter?</strong><span> Sign Up</span></p>
-                    </div>
+                  <form onSubmit={this.handleSubmit}>
+                    <p className="new-to-t">
+                      <strong>New to Twitter?</strong> <span> Sign Up</span>
+                    </p>
                     <div className="form-group">
                       <input
                         type="text"
@@ -125,25 +109,23 @@ class Home extends Component {
                         onChange={this.handleInputChange}
                       />
                     </div>
-                    <button type="submit" className="btn btn-primary">Sign Up</button>
+                    <button type="submit" className="btn btn-primary">
+                      Sign Up
+                    </button>
                   </form>
                 </div>
-
-
               </div>
             </div>
           </div>
         </div>
-      </>
+      </Layout>
     );
   }
 }
-
-export default Home;
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Home />,
     document.body.appendChild(document.createElement('div')),
-  )
-})
+  );
+});
