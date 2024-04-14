@@ -4,11 +4,6 @@ import Layout from '@src/layout';
 import './home.scss';
 
 class Home extends Component {
-  state = {
-    username: '',
-    password: '',
-    email: '',
-  };
 
   backgroundURLs = [
     'assets/images/background_2.png',
@@ -29,16 +24,24 @@ class Home extends Component {
   setBackground = () => {
     this.backgroundStep = (this.backgroundStep + 1) % this.backgroundURLs.length;
     const imageUrl = this.backgroundURLs[this.backgroundStep];
-
-    $('#homeback').fadeOut(10000, () => {
-      $('#homeback').css('background-image', `url(${imageUrl})`).fadeIn(1000);
-    });
-  };
+    if (imageUrl != null) {
+      const backElem = document.getElementById('homeback');
+      if (backElem != null) {
+        backElem.style.backgroundImage = `url(${imageUrl})`;
+      }
+    }
+  }
 
   handleInputChange = ({ target: { name, value } }) => {
-    if (name != null && value != null) {
+    if (name != null && typeof this.setState === 'function') {
       this.setState({ [name]: value });
     }
+  }
+
+  state = {
+    username: '',
+    password: '',
+    email: '',
   };
 
   handleSubmit = event => {
@@ -47,10 +50,10 @@ class Home extends Component {
     const { username, password, email } = this.state;
 
     if (
+      typeof fetch === 'function' &&
       username != null &&
       password != null &&
-      email != null &&
-      typeof fetch === 'function'
+      email != null
     ) {
       fetch('/api/users', {
         method: 'POST',
@@ -151,9 +154,12 @@ class Home extends Component {
   }
 }
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Home />,
     document.body.appendChild(document.createElement('div')),
   );
 });
+
