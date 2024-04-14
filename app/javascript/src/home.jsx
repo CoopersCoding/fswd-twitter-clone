@@ -14,11 +14,13 @@ class Home extends Component {
     "<%= asset_path 'background_2.png' %>",
     "<%= asset_path 'background_3.jpg' %>",
     "<%= asset_path 'background_1.png' %>"
-  ];
+  ].filter(url => url != null);
 
   handleInputChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    if (name != null && value != null) {
+      this.setState({ [name]: value });
+    }
   };
 
   handleSubmit = event => {
@@ -26,15 +28,22 @@ class Home extends Component {
 
     const { username, password, email } = this.state;
 
-    fetch('/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password, email }),
-    })
-      .then(response => response.json())
-      .catch(error => console.error(error));
+    if (
+      username != null &&
+      password != null &&
+      email != null &&
+      typeof fetch === 'function'
+    ) {
+      fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, email }),
+      })
+        .then(response => response.json())
+        .catch(error => console.error(error));
+    }
   };
 
   render() {
@@ -45,9 +54,11 @@ class Home extends Component {
         <div
           id="homeback"
           style={{
-            backgroundImage: `url(${this.backgroundURLs[
-              Math.floor(Math.random() * this.backgroundURLs.length)
-            ]})`,
+            backgroundImage: `url(${
+              this.backgroundURLs[
+                Math.floor(Math.random() * this.backgroundURLs.length)
+              ]
+            })`,
           }}
         />
         <div className="main">
@@ -137,5 +148,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(document.createElement('div')),
   );
 });
-
 
