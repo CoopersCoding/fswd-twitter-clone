@@ -4,22 +4,24 @@ import Layout from '@src/layout';
 import './home.scss';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    username: '',
+    password: '',
+    email: '',
+  };
 
-    this.state = {
-      username: '',
-      password: '',
-      email: '',
-    };
-  }
+  backgroundURLs = [
+    "<%= asset_path 'background_2.png' %>",
+    "<%= asset_path 'background_3.jpg' %>",
+    "<%= asset_path 'background_1.png' %>"
+  ];
 
-  handleInputChange = (event) => {
+  handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
 
     const { username, password, email } = this.state;
@@ -32,7 +34,6 @@ class Home extends Component {
       body: JSON.stringify({ username, password, email }),
     })
       .then(response => response.json())
-      .then(data => console.log(data))
       .catch(error => console.error(error));
   };
 
@@ -41,7 +42,14 @@ class Home extends Component {
 
     return (
       <Layout>
-        <div id="homeback"></div>
+        <div
+          id="homeback"
+          style={{
+            backgroundImage: `url(${this.backgroundURLs[
+              Math.floor(Math.random() * this.backgroundURLs.length)
+            ]})`,
+          }}
+        />
         <div className="main">
           <div className="container">
             <div className="row">
@@ -129,3 +137,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(document.createElement('div')),
   );
 });
+
+
