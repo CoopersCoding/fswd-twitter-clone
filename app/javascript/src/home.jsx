@@ -11,13 +11,31 @@ class Home extends Component {
   };
 
   backgroundURLs = [
-    "<%= asset_path 'background_2.png' %>",
-    "<%= asset_path 'background_3.jpg' %>",
-    "<%= asset_path 'background_1.png' %>"
-  ].filter(url => url != null);
+    'assets/images/background_2.png',
+    'assets/images/background_3.jpg',
+    'assets/images/background_1.png',
+  ];
 
-  handleInputChange = event => {
-    const { name, value } = event.target;
+  backgroundStep = 0;
+
+  componentDidMount() {
+    this.backgroundTimer = setInterval(this.setBackground, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.backgroundTimer);
+  }
+
+  setBackground = () => {
+    this.backgroundStep = (this.backgroundStep + 1) % this.backgroundURLs.length;
+    const imageUrl = this.backgroundURLs[this.backgroundStep];
+
+    $('#homeback').fadeOut(10000, () => {
+      $('#homeback').css('background-image', `url(${imageUrl})`).fadeIn(1000);
+    });
+  };
+
+  handleInputChange = ({ target: { name, value } }) => {
     if (name != null && value != null) {
       this.setState({ [name]: value });
     }
@@ -51,16 +69,7 @@ class Home extends Component {
 
     return (
       <Layout>
-        <div
-          id="homeback"
-          style={{
-            backgroundImage: `url(${
-              this.backgroundURLs[
-                Math.floor(Math.random() * this.backgroundURLs.length)
-              ]
-            })`,
-          }}
-        />
+        <div id="homeback" />
         <div className="main">
           <div className="container">
             <div className="row">
@@ -148,4 +157,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(document.createElement('div')),
   );
 });
-
