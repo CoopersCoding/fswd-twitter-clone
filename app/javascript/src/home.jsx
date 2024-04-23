@@ -19,21 +19,17 @@ class Home extends Component {
 
   componentDidMount() {
 
-    this.timer = setInterval(() => {
-      this.backgroundStep = (this.backgroundStep + 1) % this.backgroundURLs.length;
-    }, 3000);
+    
 
   }
 
   componentWillUnmount() {
-    clearInterval(this.timer);
+    
 
   }
 
   handleInputChange = ({ target: { name, value } }) => {
-    if (name != null && typeof this.setState === 'function') {
-      this.setState({ [name]: value });
-    }
+   
   }
 
   state = {
@@ -73,7 +69,7 @@ class Home extends Component {
         <div id="homeback" />
 
         <img 
-          src={this.backgroundURLs[1]} 
+          src={this.backgroundURLs[0]} 
         />
 
         <div 
