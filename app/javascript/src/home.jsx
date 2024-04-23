@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import './home.scss';
 
+
 class Home extends Component {
+  
+  // create a rotating background
+
   backgroundURLs = [
     './images/background_2.png',
     './images/background_3.jpg',
@@ -14,9 +18,16 @@ class Home extends Component {
   backgroundStep = 0;
 
   componentDidMount() {
+
+    this.timer = setInterval(() => {
+      this.backgroundStep = (this.backgroundStep + 1) % this.backgroundURLs.length;
+    }, 3000);
+
   }
 
   componentWillUnmount() {
+    clearInterval(this.timer);
+
   }
 
   handleInputChange = ({ target: { name, value } }) => {
@@ -62,7 +73,7 @@ class Home extends Component {
         <div id="homeback" />
 
         <img 
-          src={this.backgroundURLs[0]} 
+          src={this.backgroundURLs[1]} 
         />
 
         <div 
