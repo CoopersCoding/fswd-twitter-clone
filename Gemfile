@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.4'
+ruby '3.4.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.6.1'
@@ -77,3 +77,21 @@ group :production do
   # Use pg as the database for Active Record
   gem 'pg', '~> 1.4.3'
 end
+
+gem "base64", "~> 0.3.0"
+
+gem "logger", "~> 1.7"
+
+gem "json", "~> 2.6"
+
+gem "bigdecimal", "~> 4.1"
+
+gem "ostruct", "~> 0.6.3"
+
+gem "benchmark", "~> 0.5.0"
+
+gem "mutex_m", "~> 0.3.0"
+
+gem "drb", "~> 2.2"
+
+gem "observer", "~> 0.1.2"
