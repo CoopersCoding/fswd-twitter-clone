@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
 import Feed from './feed';
+import UserPage from './user_page';
 import { safeCredentials, handleErrors } from './utils/fetchHelper';
 import './home.scss';
 
@@ -34,12 +35,16 @@ class Home extends Component {
           });
         } else {
           this.setState({
+            authenticated: false,
+            currentUsername: '',
             checkingAuthentication: false,
           });
         }
       })
       .catch(() => {
         this.setState({
+          authenticated: false,
+          currentUsername: '',
           checkingAuthentication: false,
         });
       });
@@ -147,20 +152,42 @@ class Home extends Component {
       checkingAuthentication,
     } = this.state;
 
+    const pathParts = window.location.pathname
+      .split('/')
+      .filter(Boolean);
+
+    const profileUsername =
+      pathParts.length === 1
+        ? decodeURIComponent(pathParts[0])
+        : null;
+
+    // Separate user profile route: /:username
+    if (profileUsername) {
+      return <UserPage username={profileUsername} />;
+    }
+
     if (checkingAuthentication) {
       return (
         <Layout>
-          <div style={{ padding: '40px', width: '100%' }}>
+          <div
+            style={{
+              padding: '40px',
+              width: '100%',
+              textAlign: 'center',
+            }}
+          >
             Loading...
           </div>
         </Layout>
       );
     }
 
+    // Logged-in home/feed
     if (authenticated) {
       return <Feed username={currentUsername} />;
     }
 
+    // Logged-out landing page
     return (
       <Layout>
         <section className="home-hero">

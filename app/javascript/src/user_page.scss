@@ -1,0 +1,111 @@
+.user-page {
+  width: 100%;
+  max-width: 650px;
+  margin: 30px auto;
+  background: #ffffff;
+  border: 1px solid #e6ecf0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.user-header {
+  border-bottom: 1px solid #e6ecf0;
+}
+
+.back-home {
+  display: block;
+  padding: 16px 20px;
+  color: #1da1f2;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-home:hover {
+  text-decoration: underline;
+}
+
+.user-profile {
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
+  border-radius: 50%;
+  background: #1da1f2;
+  color: #ffffff;
+  font-size: 34px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-profile h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.user-profile p {
+  margin: 3px 0;
+  color: #657786;
+}
+
+.user-profile span {
+  color: #657786;
+  font-size: 14px;
+}
+
+.user-tweet {
+  padding: 18px 20px;
+  display: flex;
+  gap: 12px;
+  border-bottom: 1px solid #e6ecf0;
+}
+
+.user-tweet:last-child {
+  border-bottom: 0;
+}
+
+.user-tweet-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-tweet-content strong {
+  color: #14171a;
+}
+
+.user-tweet-content p {
+  margin: 8px 0 0;
+  line-height: 1.45;
+  font-size: 16px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.user-tweet-image {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  margin-top: 12px;
+  border-radius: 12px;
+}
+
+.user-loading,
+.user-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #657786;
+}
+
+.user-error {
+  padding: 14px 20px;
+  background: #ffe8ec;
+  color: #c00034;
+}
