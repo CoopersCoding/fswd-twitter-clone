@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
+import Feed from './feed';
 import { safeCredentials, handleErrors } from './utils/fetchHelper';
 import './home.scss';
 
@@ -12,6 +13,36 @@ class Home extends Component {
     signupEmail: '',
     signupPassword: '',
     message: '',
+    authenticated: false,
+    currentUsername: '',
+    checkingAuthentication: true,
+  };
+
+  componentDidMount() {
+    this.checkAuthentication();
+  }
+
+  checkAuthentication = () => {
+    fetch('/api/authenticated', safeCredentials())
+      .then(handleErrors)
+      .then((data) => {
+        if (data.authenticated) {
+          this.setState({
+            authenticated: true,
+            currentUsername: data.username,
+            checkingAuthentication: false,
+          });
+        } else {
+          this.setState({
+            checkingAuthentication: false,
+          });
+        }
+      })
+      .catch(() => {
+        this.setState({
+          checkingAuthentication: false,
+        });
+      });
   };
 
   handleInputChange = ({ target: { name, value } }) => {
@@ -38,14 +69,22 @@ class Home extends Component {
       .then(handleErrors)
       .then((data) => {
         if (data.success === false) {
-          this.setState({ message: 'Invalid username or password.' });
+          this.setState({
+            message: 'Invalid username or password.',
+          });
           return;
         }
 
-        this.setState({ message: 'Signed in successfully.' });
+        this.setState({
+          authenticated: true,
+          currentUsername: loginUsername,
+          message: '',
+        });
       })
       .catch(() => {
-        this.setState({ message: 'Unable to sign in. Please try again.' });
+        this.setState({
+          message: 'Unable to sign in. Please try again.',
+        });
       });
   };
 
@@ -74,7 +113,9 @@ class Home extends Component {
       .then(handleErrors)
       .then((data) => {
         if (data.success === false) {
-          this.setState({ message: 'Unable to create that account.' });
+          this.setState({
+            message: 'Unable to create that account.',
+          });
           return;
         }
 
@@ -87,7 +128,9 @@ class Home extends Component {
         });
       })
       .catch(() => {
-        this.setState({ message: 'Unable to create account. Please try again.' });
+        this.setState({
+          message: 'Unable to create account. Please try again.',
+        });
       });
   };
 
@@ -99,7 +142,24 @@ class Home extends Component {
       signupEmail,
       signupPassword,
       message,
+      authenticated,
+      currentUsername,
+      checkingAuthentication,
     } = this.state;
+
+    if (checkingAuthentication) {
+      return (
+        <Layout>
+          <div style={{ padding: '40px', width: '100%' }}>
+            Loading...
+          </div>
+        </Layout>
+      );
+    }
+
+    if (authenticated) {
+      return <Feed username={currentUsername} />;
+    }
 
     return (
       <Layout>
@@ -117,7 +177,10 @@ class Home extends Component {
             </div>
 
             <div className="auth-column">
-              <form className="auth-card" onSubmit={this.handleLogin}>
+              <form
+                className="auth-card"
+                onSubmit={this.handleLogin}
+              >
                 <h2>Sign in</h2>
 
                 <input
@@ -138,12 +201,18 @@ class Home extends Component {
                   required
                 />
 
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                >
                   Log in
                 </button>
               </form>
 
-              <form className="auth-card" onSubmit={this.handleSignup}>
+              <form
+                className="auth-card"
+                onSubmit={this.handleSignup}
+              >
                 <h2>
                   New to Twitter? <span>Sign up</span>
                 </h2>
@@ -172,15 +241,23 @@ class Home extends Component {
                   value={signupPassword}
                   onChange={this.handleInputChange}
                   placeholder="Password"
+                  minLength="8"
                   required
                 />
 
-                <button type="submit" className="btn signup-button">
+                <button
+                  type="submit"
+                  className="btn signup-button"
+                >
                   Sign up for Twitter
                 </button>
               </form>
 
-              {message && <div className="auth-message">{message}</div>}
+              {message && (
+                <div className="auth-message">
+                  {message}
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -192,6 +269,8 @@ class Home extends Component {
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Home />,
-    document.body.appendChild(document.createElement('div')),
+    document.body.appendChild(
+      document.createElement('div'),
+    ),
   );
 });
