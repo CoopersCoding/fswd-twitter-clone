@@ -1,156 +1,193 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Layout from '@src/layout';
+import { safeCredentials, handleErrors } from './utils/fetchHelper';
 import './home.scss';
 
-
 class Home extends Component {
-  
-  // create a rotating background
-
-  backgroundURLs = [
-    './images/background_2.png',
-    './images/background_3.jpg',
-    './images/background_1.png',
-  ];
-
-
-  backgroundStep = 0;
-
-  componentDidMount() {
-
-    
-
-  }
-
-  componentWillUnmount() {
-    
-
-  }
-
-  handleInputChange = ({ target: { name, value } }) => {
-   
-  }
-
   state = {
-    username: '',
-    password: '',
-    email: '',
+    loginUsername: '',
+    loginPassword: '',
+    signupUsername: '',
+    signupEmail: '',
+    signupPassword: '',
+    message: '',
   };
 
-  handleSubmit = event => {
+  handleInputChange = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
+  };
+
+  handleLogin = (event) => {
     event.preventDefault();
 
-    const { username, password, email } = this.state;
+    const { loginUsername, loginPassword } = this.state;
 
-    if (
-      typeof fetch === 'function' &&
-      username != null &&
-      password != null &&
-      email != null
-    ) {
-      fetch('/api/users', {
+    fetch(
+      '/api/sessions',
+      safeCredentials({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, email }),
+        body: JSON.stringify({
+          user: {
+            username: loginUsername,
+            password: loginPassword,
+          },
+        }),
+      }),
+    )
+      .then(handleErrors)
+      .then((data) => {
+        if (data.success === false) {
+          this.setState({ message: 'Invalid username or password.' });
+          return;
+        }
+
+        this.setState({ message: 'Signed in successfully.' });
       })
-        .then(response => response.json())
-        .catch(error => console.error(error));
-    }
+      .catch(() => {
+        this.setState({ message: 'Unable to sign in. Please try again.' });
+      });
+  };
+
+  handleSignup = (event) => {
+    event.preventDefault();
+
+    const {
+      signupUsername,
+      signupEmail,
+      signupPassword,
+    } = this.state;
+
+    fetch(
+      '/api/users',
+      safeCredentials({
+        method: 'POST',
+        body: JSON.stringify({
+          user: {
+            username: signupUsername,
+            email: signupEmail,
+            password: signupPassword,
+          },
+        }),
+      }),
+    )
+      .then(handleErrors)
+      .then((data) => {
+        if (data.success === false) {
+          this.setState({ message: 'Unable to create that account.' });
+          return;
+        }
+
+        this.setState({
+          message: 'Account created. You can sign in now.',
+          loginUsername: signupUsername,
+          signupUsername: '',
+          signupEmail: '',
+          signupPassword: '',
+        });
+      })
+      .catch(() => {
+        this.setState({ message: 'Unable to create account. Please try again.' });
+      });
   };
 
   render() {
-    const { username, password, email } = this.state;
+    const {
+      loginUsername,
+      loginPassword,
+      signupUsername,
+      signupEmail,
+      signupPassword,
+      message,
+    } = this.state;
 
     return (
       <Layout>
-        <div id="homeback" />
+        <section className="home-hero">
+          <div className="home-overlay">
+            <div className="welcome">
+              <h1>Welcome to Twitter.</h1>
 
-        <img 
-          src={this.backgroundURLs[0]} 
-        />
+              <p className="welcome-copy">
+                Connect with your friends and the world around you.
+              </p>
 
-        <div 
-          className="front-card col-xs-10 col-xs-offset-1"
-          style={{ backgroundImage: `url(${this.backgroundURLs[0]})`, backgroundSize: 'cover' }}
-        >
-          <div className="log-in col-xs-4 col-xs-offset-1">
-            <form>
-              <div className="form-group">
+              <p>Altcademy Twitter Project</p>
+              <p>Tweet &amp; photo by @altcademy</p>
+            </div>
+
+            <div className="auth-column">
+              <form className="auth-card" onSubmit={this.handleLogin}>
+                <h2>Sign in</h2>
+
                 <input
                   type="text"
-                  className="form-control username"
-                  placeholder="Username"
-                  name="username"
-                  value={username}
+                  name="loginUsername"
+                  value={loginUsername}
                   onChange={this.handleInputChange}
+                  placeholder="Username"
+                  required
                 />
-              </div>
-              <div className="form-group">
+
                 <input
                   type="password"
-                  className="form-control password"
-                  placeholder="Password"
-                  name="password"
-                  value={password}
+                  name="loginPassword"
+                  value={loginPassword}
                   onChange={this.handleInputChange}
+                  placeholder="Password"
+                  required
                 />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Sign In
-              </button>
-            </form>
-          </div>
 
-          <div className="sign-up col-xs-4 col-xs-offset-1">
-            <form onSubmit={this.handleSubmit}>
-              <p className="new-to-t">
-                <strong>New to Twitter?</strong> <span> Sign Up</span>
-              </p>
-              <div className="form-group">
+                <button type="submit" className="btn btn-primary">
+                  Log in
+                </button>
+              </form>
+
+              <form className="auth-card" onSubmit={this.handleSignup}>
+                <h2>
+                  New to Twitter? <span>Sign up</span>
+                </h2>
+
                 <input
                   type="text"
-                  className="form-control username"
-                  placeholder="Username"
-                  name="username"
-                  value={username}
+                  name="signupUsername"
+                  value={signupUsername}
                   onChange={this.handleInputChange}
+                  placeholder="Username"
+                  required
                 />
-              </div>
-              <div className="form-group">
+
                 <input
                   type="email"
-                  className="form-control email"
-                  placeholder="Email"
-                  name="email"
-                  value={email}
+                  name="signupEmail"
+                  value={signupEmail}
                   onChange={this.handleInputChange}
+                  placeholder="Email"
+                  required
                 />
-              </div>
-              <div className="form-group">
+
                 <input
                   type="password"
-                  className="form-control password"
-                  placeholder="Password"
-                  name="password"
-                  value={password}
+                  name="signupPassword"
+                  value={signupPassword}
                   onChange={this.handleInputChange}
+                  placeholder="Password"
+                  required
                 />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Sign Up
-              </button>
-            </form>
+
+                <button type="submit" className="btn signup-button">
+                  Sign up for Twitter
+                </button>
+              </form>
+
+              {message && <div className="auth-message">{message}</div>}
+            </div>
           </div>
-        </div>
+        </section>
       </Layout>
     );
   }
 }
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
@@ -158,4 +195,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(document.createElement('div')),
   );
 });
-

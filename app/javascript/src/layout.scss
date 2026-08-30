@@ -1,18 +1,25 @@
-.front-card {
-    margin-top: 70px;
+.navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e6ecf0;
+  margin-bottom: 0;
 }
 
-.container {
-    background-image: url(/public/images/background_1.png);
-    background-size: cover;
-    
-  }
+.navbar .container {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  form {
-    margin-top: 50px;
-    width: 300px;
-    margin: 0 auto;
-    margin-top: 50px;
-  }
+.navbar-brand {
+  font-size: 22px;
+  padding: 0;
+}
 
-  
+.navbar-right {
+  margin-left: auto;
+}
+
+.main {
+  min-height: calc(100vh - 54px);
+}
