@@ -64,7 +64,7 @@ class Feed extends Component {
 
     const { message, image, posting } = this.state;
 
-    if (!message.trim() || posting) {
+    if ((!message.trim() && !image) || posting) {
       return;
     }
 
@@ -102,10 +102,12 @@ class Feed extends Component {
 
         this.loadTweets();
       })
-      .catch(() => {
+      .catch((error) => {
         this.setState({
           posting: false,
-          error: 'Unable to post tweet. Please try the photo again.',
+          error: error && error.message
+            ? `Unable to post tweet: ${error.message}`
+            : 'Unable to post tweet. Please try the photo again.',
         });
       });
   };
@@ -215,7 +217,6 @@ class Feed extends Component {
                 onChange={this.handleMessageChange}
                 placeholder="What's happening?"
                 maxLength="140"
-                required
               />
 
               <div className="composer-footer">
@@ -260,7 +261,7 @@ class Feed extends Component {
                   <button
                     type="submit"
                     className="tweet-button"
-                    disabled={!message.trim() || posting}
+                    disabled={(!message.trim() && !image) || posting}
                   >
                     {posting ? 'Posting...' : 'Tweet'}
                   </button>
@@ -317,7 +318,7 @@ class Feed extends Component {
                         )}
                       </div>
 
-                      <p>{tweet.message}</p>
+                      {tweet.message && <p>{tweet.message}</p>}
 
                       {tweet.image && (
                         <img
