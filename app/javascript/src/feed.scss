@@ -123,9 +123,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
+}
+
+.photo-selection {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
 }
 
 .photo-button {
+  flex: 0 0 auto;
   color: #1da1f2;
   font-weight: 600;
   cursor: pointer;
@@ -136,8 +145,40 @@
   display: none;
 }
 
+.selected-photo {
+  display: flex;
+  min-width: 0;
+  max-width: 240px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border: 1px solid #ccd6dd;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #657786;
+  font-size: 12px;
+}
+
+.selected-photo span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.selected-photo button {
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #e0245e;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .composer-actions {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 12px;
 }
@@ -294,5 +335,15 @@
 
   .feed-column {
     width: 100%;
+  }
+
+  .composer-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .composer-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

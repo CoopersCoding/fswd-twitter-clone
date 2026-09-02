@@ -51,6 +51,14 @@ class Feed extends Component {
     });
   };
 
+  handleClearImage = () => {
+    this.setState({ image: null });
+
+    if (this.fileInput) {
+      this.fileInput.value = '';
+    }
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
 
@@ -97,7 +105,7 @@ class Feed extends Component {
       .catch(() => {
         this.setState({
           posting: false,
-          error: 'Unable to post tweet.',
+          error: 'Unable to post tweet. Please try the photo again.',
         });
       });
   };
@@ -148,6 +156,7 @@ class Feed extends Component {
     const {
       tweets,
       message,
+      image,
       loading,
       posting,
       error,
@@ -210,18 +219,32 @@ class Feed extends Component {
               />
 
               <div className="composer-footer">
-                <label className="photo-button">
-                  Add photo
+                <div className="photo-selection">
+                  <label className="photo-button">
+                    Add photo
 
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={(input) => {
-                      this.fileInput = input;
-                    }}
-                    onChange={this.handleImageChange}
-                  />
-                </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={(input) => {
+                        this.fileInput = input;
+                      }}
+                      onChange={this.handleImageChange}
+                    />
+                  </label>
+
+                  {image && (
+                    <div className="selected-photo">
+                      <span title={image.name}>{image.name}</span>
+                      <button
+                        type="button"
+                        onClick={this.handleClearImage}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 <div className="composer-actions">
                   <span
