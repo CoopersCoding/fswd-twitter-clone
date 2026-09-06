@@ -33,9 +33,13 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'
 
-  # Use durable object storage in production when configured. Local remains the
-  # safe fallback until the Supabase Storage credentials are added to Heroku.
-  config.active_storage.service = ENV.fetch('ACTIVE_STORAGE_SERVICE', 'local').to_sym
+  # Switch to durable Supabase Storage as soon as the server-side S3 credentials
+  # are present. Until then, keep the existing local service so deploys still boot.
+  config.active_storage.service = if ENV['SUPABASE_S3_ACCESS_KEY_ID'].present? && ENV['SUPABASE_S3_SECRET_ACCESS_KEY'].present?
+                                    :supabase
+                                  else
+                                    :local
+                                  end
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
